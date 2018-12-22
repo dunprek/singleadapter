@@ -7,28 +7,15 @@ package com.don.singleadapter
  * Jakarta - Indonesia
  */
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 
-abstract class SingleAdapter<T> : RecyclerView.Adapter<RecyclerView.ViewHolder> {
+abstract class SingleAdapter<T>(var listItems: List<T>, val context: Context) :
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-
-    var listItems: List<T>
-
-    constructor(listItems: List<T>) {
-        this.listItems = listItems
-    }
-
-    constructor() {
-        listItems = emptyList()
-    }
-
-    fun setItems(listItems: List<T>) {
-        this.listItems = listItems
-        notifyDataSetChanged()
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return getViewHolder(
@@ -39,7 +26,7 @@ abstract class SingleAdapter<T> : RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as Binder<T>).bind(listItems[position])
+        (holder as Binder<T>).bind(listItems[position], context)
     }
 
     override fun getItemCount(): Int {
@@ -52,12 +39,13 @@ abstract class SingleAdapter<T> : RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     protected abstract fun getLayoutId(position: Int, obj: T): Int
 
-    //    abstract fun getViewHolder(view: View, viewType: Int):RecyclerView.ViewHolder
-    fun getViewHolder(view: View, viewType: Int): RecyclerView.ViewHolder {
+    private fun getViewHolder(view: View, viewType: Int): RecyclerView.ViewHolder {
         return ViewHolderFactory.create(view, viewType)
     }
 
     internal interface Binder<T> {
-        fun bind(data: T)
+        fun bind(data: T, context: Context)
     }
+
+
 }

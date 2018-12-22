@@ -1,7 +1,9 @@
 package com.don.singleadapter
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 
 /**
@@ -23,32 +25,32 @@ object ViewHolderFactory {
         }
     }
 
-
     class NameViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), SingleAdapter.Binder<NameMdl> {
-        override fun bind(data: NameMdl) {
+        override fun bind(data: NameMdl, context: Context) {
             textView.text = data.name
+            textView.setOnClickListener {
+                (context as MainActivity).showToast(adapterPosition)
+            }
         }
 
-        var textView: TextView
-
-        init {
-            textView = itemView.findViewById(R.id.tv_name)
-        }
+        var textView: TextView = itemView.findViewById(R.id.tv_name)
 
     }
 
     class OtherViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), SingleAdapter.Binder<OtherMdl> {
-        override fun bind(data: OtherMdl) {
+        override fun bind(data: OtherMdl, context: Context) {
             tvName.text = data.name
             tvAddress.text = data.address
+            llContainer.setOnClickListener {
+                (context as MainActivity).showToast(adapterPosition)
+            }
         }
 
-        var tvName: TextView
-        var tvAddress: TextView
+        var tvName: TextView = itemView.findViewById(R.id.tv_name)
+        var tvAddress: TextView = itemView.findViewById(R.id.tv_address)
+        var llContainer: LinearLayout = itemView.findViewById(R.id.ll_container)
 
-        init {
-            tvName = itemView.findViewById(R.id.tv_name)
-            tvAddress = itemView.findViewById(R.id.tv_address)
-        }
     }
+
+
 }
